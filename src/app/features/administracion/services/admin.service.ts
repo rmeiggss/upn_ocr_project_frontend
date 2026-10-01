@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Usuario } from '../../../core/models/usuario.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
   private http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:5000/api';
+  private readonly baseUrl = environment.apiUrl;
 
   private mockUsuarios: Usuario[] = [
     {

@@ -5,12 +5,13 @@ import { Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { Usuario, LoginRequest, LoginResponse, ApiResponse } from '../models/usuario.model';
 import { NotificationService } from './notification.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:5000/api';
+  private readonly baseUrl = environment.apiUrl;
   private readonly TOKEN_KEY = 'shohin_auth_token';
   private readonly USER_KEY = 'shohin_auth_user';
 

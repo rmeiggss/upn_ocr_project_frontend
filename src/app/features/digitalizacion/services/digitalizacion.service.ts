@@ -4,13 +4,14 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { TicketDigitalizacion, CrearTicketRequest } from '../../../core/models/ticket.model';
 import { DocumentoContable, ValidarDocumentoRequest, CorregirCampoRequest } from '../../../core/models/comprobante.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DigitalizacionService {
   private http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:5000/api';
+  private readonly baseUrl = environment.apiUrl;
 
   // Datos mock con fidelidad total al wireframe y base de datos
   private mockTickets: TicketDigitalizacion[] = [

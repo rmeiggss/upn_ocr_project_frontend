@@ -16,10 +16,12 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
       <!-- HEADER CON TÍTULO Y ACCIONES CUS-01 -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-md">CUS-01</span>
-            <h1 class="text-lg font-extrabold text-slate-800">Recepción y Digitalización de Lotes</h1>
-          </div>
+          <h1 class="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+            <span>Recepción y Digitalización de Lotes</span>
+            <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-01: Recepción de Lotes y Control de Escaneo">
+              <i class="fas fa-circle-info"></i>
+            </span>
+          </h1>
           <p class="text-xs text-slate-500 mt-1">
             Gestión de tickets de digitalización, verificación de folios físicos y recepción de comprobantes contables
           </p>
@@ -141,8 +143,12 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
         <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded">CUS-01</span>
-              <h3 class="text-sm font-bold text-slate-800">Registrar Nuevo Lote de Digitalización</h3>
+              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                <span>Registrar Nuevo Lote de Digitalización</span>
+                <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-01: Registro de Lote Físico">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+              </h3>
             </div>
             <button (click)="mostrarModalNuevoTicket = false" class="text-slate-400 hover:text-slate-600">
               <i class="fas fa-times"></i>
@@ -214,8 +220,12 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded">CUS-01</span>
-              <h3 class="text-sm font-bold text-slate-800">Cargar Archivo PDF a Azure Storage</h3>
+              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                <span>Cargar Archivo PDF a Azure Storage</span>
+                <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-01: Carga y Procesamiento OCR Asíncrono">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+              </h3>
             </div>
             <button (click)="mostrarModalSubida = false" class="text-slate-400 hover:text-slate-600">
               <i class="fas fa-times"></i>

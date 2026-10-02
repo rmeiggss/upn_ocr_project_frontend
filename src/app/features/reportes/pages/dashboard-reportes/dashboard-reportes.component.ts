@@ -15,10 +15,12 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pip
       <!-- HEADER CUS-04 -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-md">CUS-04</span>
-            <h1 class="text-lg font-extrabold text-slate-800">Generación de Reportes Tributarios y Auditoría</h1>
-          </div>
+          <h1 class="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+            <span>Generación de Reportes Tributarios y Auditoría</span>
+            <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-04: Reportes Tributarios y Conciliación PLE 8.1">
+              <i class="fas fa-circle-info"></i>
+            </span>
+          </h1>
           <p class="text-xs text-slate-500 mt-1">
             Conciliación tributaria SUNAT, Libro Electrónico de Compras PLE 8.1 y métricas de efectividad OCR
           </p>
@@ -124,7 +126,7 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pip
         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm space-y-4">
           <div class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
             <span>Matriz de Inconsistencias Tributarias</span>
-            <span class="text-[10px] text-slate-400">Auditoría CUS-04</span>
+            <span class="text-[10px] text-slate-400 cursor-help" title="Caso de Uso CUS-04: Auditoría e Inconsistencias Tributarias">Auditoría Tributaria</span>
           </div>
 
           <div class="space-y-2.5">

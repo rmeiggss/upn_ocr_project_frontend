@@ -15,10 +15,12 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
       <!-- HEADER CUS-06 -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-md">CUS-06</span>
-            <h1 class="text-lg font-extrabold text-slate-800">Gestión de Seguridad y Roles (RBAC)</h1>
-          </div>
+          <h1 class="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+            <span>Gestión de Seguridad y Roles (RBAC)</span>
+            <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-06: Mantenimiento de Usuarios y Roles RBAC">
+              <i class="fas fa-circle-info"></i>
+            </span>
+          </h1>
           <p class="text-xs text-slate-500 mt-1">
             Administración de usuarios, control de accesos por rol y registro de auditoría transversal
           </p>
@@ -113,8 +115,12 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded">CUS-06</span>
-              <h3 class="text-sm font-bold text-slate-800">Crear Usuario del Sistema</h3>
+              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                <span>Crear Usuario del Sistema</span>
+                <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-06: Registro de Nuevos Usuarios y Asignación de Roles">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+              </h3>
             </div>
             <button (click)="mostrarModalNuevo = false" class="text-slate-400 hover:text-slate-600">
               <i class="fas fa-times"></i>
@@ -150,10 +156,10 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
                 [(ngModel)]="nuevoUsuario.rol"
                 name="rol"
                 class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:bg-white">
-                <option value="Contable">Contable (CUS-02, CUS-05)</option>
-                <option value="Personal de archivo">Personal de archivo (CUS-01, CUS-03)</option>
-                <option value="SUNAT">SUNAT (Auditor) (CUS-04)</option>
-                <option value="Administrador">Administrador (CUS-06)</option>
+                <option value="Contable" title="Acceso a Supervisión OCR y Archivo Histórico">Contable</option>
+                <option value="Personal de archivo" title="Acceso a Recepción de Lotes y Archivo Histórico">Personal de archivo</option>
+                <option value="SUNAT" title="Acceso a Reportes Tributarios y Archivo Histórico">SUNAT (Auditor)</option>
+                <option value="Administrador" title="Acceso Integral a Todos los Módulos">Administrador</option>
               </select>
             </div>
 

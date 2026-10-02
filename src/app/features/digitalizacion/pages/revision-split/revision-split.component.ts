@@ -25,10 +25,12 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
           </a>
           <div>
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded">CUS-02 / CUS-05</span>
-              <h1 class="text-xs font-bold text-slate-800">
-                Supervisión OCR y Control de Calidad:
+              <h1 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <span>Supervisión OCR y Control de Calidad:</span>
                 <span class="font-mono text-blue-600">{{ documento.serieNumero }}</span>
+                <span class="text-slate-400 hover:text-amber-600 cursor-help text-xs" title="Casos de Uso CUS-02 (Supervisión OCR) y CUS-05 (Corrección de Comprobantes)">
+                  <i class="fas fa-circle-info"></i>
+                </span>
               </h1>
             </div>
             <div class="text-[10px] text-slate-400">
@@ -202,9 +204,10 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
                 <button
                   type="button"
                   (click)="corregirIgvAutomatico()"
+                  title="Caso de Uso CUS-05: Corrección de Comprobantes con Discrepancia Aritmética"
                   class="px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm shadow-blue-500/30 transition-all flex items-center gap-2">
                   <i class="fas fa-wand-magic-sparkles"></i>
-                  <span>CUS-05: Recalcular IGV Automático al 18% (S/ 180.00)</span>
+                  <span>Recalcular IGV Automático al 18% (S/ 180.00)</span>
                 </button>
               </div>
             </div>
@@ -343,7 +346,10 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
             <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-200/80 text-xs">
               <div class="font-bold text-blue-900 flex items-center gap-2 mb-1">
                 <i class="fas fa-box-archive text-blue-600"></i>
-                <span>Trazabilidad Física en Almacén (CUS-03)</span>
+                <span>Trazabilidad Física en Almacén</span>
+                <span class="text-blue-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-03: Ubicación y Archivo Histórico">
+                  <i class="fas fa-circle-info"></i>
+                </span>
               </div>
               <div class="grid grid-cols-3 gap-2 text-[11px] text-slate-600">
                 <div>Almacén: <strong class="text-slate-800">{{ documento.ubicacionAlmacen }}</strong></div>
@@ -353,10 +359,10 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
             </div>
           </div>
 
-          <!-- BARRA INFERIOR DE DECISIÓN Y TRANSICIÓN DE ESTADOS (CUS-02) -->
+          <!-- BARRA INFERIOR DE DECISIÓN Y TRANSICIÓN DE ESTADOS -->
           <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3 shrink-0">
             <div class="text-xs text-slate-500">
-              Confirmar validación técnica RUP:
+              Confirmar validación técnica:
             </div>
 
             <div class="flex items-center gap-2">
@@ -384,9 +390,10 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
               <button
                 type="button"
                 (click)="cambiarEstado('CORRECTO')"
+                title="Caso de Uso CUS-02: Control de Calidad y Aprobación Contable"
                 class="px-4 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm shadow-emerald-500/30 rounded-lg transition-all flex items-center gap-1.5">
                 <i class="fas fa-check"></i>
-                <span>Aprobar Documento (CUS-02)</span>
+                <span>Aprobar Documento</span>
               </button>
             </div>
           </div>

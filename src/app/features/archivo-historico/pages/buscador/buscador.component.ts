@@ -17,10 +17,12 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pip
       <!-- HEADER CUS-03 -->
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded-md">CUS-03</span>
-            <h1 class="text-lg font-extrabold text-slate-800">Búsqueda y Localización en Archivo Histórico</h1>
-          </div>
+          <h1 class="text-lg font-extrabold text-slate-800 flex items-center gap-2">
+            <span>Búsqueda y Localización en Archivo Histórico</span>
+            <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-03: Búsqueda y Localización en Archivo Histórico">
+              <i class="fas fa-circle-info"></i>
+            </span>
+          </h1>
           <p class="text-xs text-slate-500 mt-1">
             Consulta de comprobantes contables digitalizados y geolocalización en almacenes y cajas físicas
           </p>
@@ -193,8 +195,12 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pip
         <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
           <div class="flex items-center justify-between pb-3 border-b border-slate-100">
             <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 text-[10px] font-bold bg-blue-100 text-blue-700 rounded">CUS-03</span>
-              <h3 class="text-sm font-bold text-slate-800">Solicitud de Desarchivamiento Físico</h3>
+              <h3 class="text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                <span>Solicitud de Desarchivamiento Físico</span>
+                <span class="text-slate-400 hover:text-blue-600 cursor-help text-xs" title="Caso de Uso CUS-03: Desarchivamiento Físico y Trazabilidad">
+                  <i class="fas fa-circle-info"></i>
+                </span>
+              </h3>
             </div>
             <button (click)="mostrarModalSolicitud = false" class="text-slate-400 hover:text-slate-600">
               <i class="fas fa-times"></i>

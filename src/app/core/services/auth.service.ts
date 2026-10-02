@@ -18,7 +18,7 @@ export class AuthService {
   private currentUserSignal = signal<Usuario | null>(this.getStoredUser());
   readonly currentUser = this.currentUserSignal.asReadonly();
   readonly isAuthenticated = computed(() => !!this.currentUserSignal());
-  readonly userRole = computed(() => this.currentUserSignal()?.rol || 'Contable');
+  readonly userRole = computed(() => this.currentUserSignal()?.rol || '');
 
   // Usuarios predeterminados para la demostración académica
   readonly demoUsers: Record<string, Usuario> = {
@@ -64,12 +64,7 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
     private notificationService: NotificationService
-  ) {
-    if (!this.currentUserSignal()) {
-      // Iniciar sesión con el usuario de demostración Contable por defecto
-      this.setUserSession(this.demoUsers['contable'], 'demo-jwt-token-shohin-enterprise-2026');
-    }
-  }
+  ) {}
 
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
@@ -122,6 +117,29 @@ export class AuthService {
         this.router.navigate(['/administracion']);
         break;
     }
+  }
+
+  getHomeRouteForRole(role?: string | null): string {
+    const userRole = role || this.userRole();
+    switch (userRole) {
+      case 'Personal de archivo':
+        return '/digitalizacion/tickets';
+      case 'Contable':
+        return '/digitalizacion/revision/1';
+      case 'SUNAT':
+        return '/reportes';
+      case 'Administrador':
+        return '/administracion';
+      default:
+        return '/login';
+    }
+  }
+
+  canAccess(allowedRoles: string[]): boolean {
+    const role = this.userRole();
+    if (!role) return false;
+    if (role === 'Administrador') return true;
+    return allowedRoles.includes(role);
   }
 
   logout(): void {

@@ -23,9 +23,11 @@ import { NotificationService } from '../../../../core/services/notification.serv
           </div>
           <h1 class="text-xl font-extrabold text-slate-800 tracking-tight">SHOHIN S.A.</h1>
           <p class="text-xs text-slate-500 mt-1">Sistema Integrado de Digitalización y Archivo Contable</p>
-          <div class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[11px] font-semibold">
+          <div
+            class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[11px] font-semibold cursor-help"
+            title="Módulo de Seguridad RUP: Caso de Uso CUS-06 Control de Acceso y Roles">
             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-            CUS-06: Control de Acceso y Seguridad RBAC
+            Control de Acceso y Seguridad RBAC
           </div>
         </div>
 
@@ -75,47 +77,51 @@ import { NotificationService } from '../../../../core/services/notification.serv
         <!-- Acceso Rápido para Demostración Académica -->
         <div class="mt-6 pt-5 border-t border-slate-100 relative">
           <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider text-center mb-3">
-            Acceso Rápido para Evaluación Docente
+            Acceso Rápido para Demostración
           </div>
           <div class="grid grid-cols-2 gap-2">
             <button
               type="button"
               (click)="quickLogin('contable')"
-              class="p-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
+              title="Caso de Uso CUS-02 / CUS-05: Supervisión y Corrección OCR"
+              class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
               <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700 flex items-center gap-1.5">
                 <span>💼</span> Contable
               </div>
-              <div class="text-[9px] text-slate-400">CUS-02 / CUS-05</div>
+              <div class="text-[9px] text-slate-400">Revisión OCR y Validación</div>
             </button>
 
             <button
               type="button"
               (click)="quickLogin('archivo')"
-              class="p-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
+              title="Caso de Uso CUS-01 / CUS-03: Recepción de Lotes y Archivo Histórico"
+              class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
               <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700 flex items-center gap-1.5">
                 <span>📁</span> Archivo
               </div>
-              <div class="text-[9px] text-slate-400">CUS-01 / CUS-03</div>
+              <div class="text-[9px] text-slate-400">Recepción y Búsqueda</div>
             </button>
 
             <button
               type="button"
               (click)="quickLogin('sunat')"
-              class="p-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
+              title="Caso de Uso CUS-04: Reportes Tributarios y Auditoría PLE 8.1"
+              class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
               <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700 flex items-center gap-1.5">
                 <span>🔍</span> SUNAT
               </div>
-              <div class="text-[9px] text-slate-400">CUS-04 Auditoría</div>
+              <div class="text-[9px] text-slate-400">Auditoría Tributaria</div>
             </button>
 
             <button
               type="button"
               (click)="quickLogin('admin')"
-              class="p-2 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
+              title="Caso de Uso CUS-06: Gestión Integral de Usuarios y Seguridad"
+              class="p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl text-left transition-all group">
               <div class="text-[11px] font-bold text-slate-700 group-hover:text-blue-700 flex items-center gap-1.5">
                 <span>⚙️</span> Admin
               </div>
-              <div class="text-[9px] text-slate-400">CUS-06 RBAC</div>
+              <div class="text-[9px] text-slate-400">Acceso Total TI</div>
             </button>
           </div>
         </div>
@@ -140,7 +146,7 @@ export class LoginComponent {
 
     this.loading = true;
     this.authService.login({ codigoUsuario: this.codigoUsuario, password: this.password }).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         this.loading = false;
         this.redirectByRole();
       },
@@ -156,10 +162,7 @@ export class LoginComponent {
   }
 
   private redirectByRole(): void {
-    const role = this.authService.userRole();
-    if (role === 'Personal de archivo') this.router.navigate(['/digitalizacion/tickets']);
-    else if (role === 'SUNAT') this.router.navigate(['/reportes']);
-    else if (role === 'Administrador') this.router.navigate(['/administracion']);
-    else this.router.navigate(['/digitalizacion/revision/1']);
+    const home = this.authService.getHomeRouteForRole();
+    this.router.navigate([home]);
   }
 }

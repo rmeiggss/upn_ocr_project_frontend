@@ -42,69 +42,84 @@ import { NotificationService } from '../../core/services/notification.service';
 
         <!-- Menú de Navegación por CUS -->
         <nav class="flex-1 px-3 space-y-1.5 overflow-y-auto pt-2">
-          <div class="px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-            Casos de Uso del Sistema
+          <div class="px-3 pb-1 text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center justify-between">
+            <span>Módulos del Sistema</span>
+            <span class="text-[9px] text-slate-600 font-mono" title="Acceso controlado según perfil">RBAC</span>
           </div>
 
-          <!-- CUS-01 -->
+          <!-- Recepción Lotes (CUS-01) -->
           <a
+            *ngIf="canAccess(['Personal de archivo', 'Administrador'])"
             routerLink="/digitalizacion/tickets"
             routerLinkActive="bg-blue-600 text-white font-medium shadow-md shadow-blue-600/30"
+            title="Caso de Uso CUS-01: Recepción y Digitalización de Lotes"
             class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
             <i class="fas fa-boxes-packing w-4 text-center text-slate-400 group-hover:text-blue-400"></i>
             <div class="flex-1">
-              <div>CUS-01: Recepción Lotes</div>
+              <div class="font-medium text-slate-200 group-hover:text-white">Recepción de Lotes</div>
               <div class="text-[10px] text-slate-400 font-normal opacity-75">Bandeja de escaneo</div>
             </div>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-300 font-mono border border-slate-700">CUS-01</span>
           </a>
 
-          <!-- CUS-02 & CUS-05 -->
+          <!-- Revisión OCR (CUS-02 & CUS-05) -->
           <a
+            *ngIf="canAccess(['Contable', 'Administrador'])"
             routerLink="/digitalizacion/revision/1"
             routerLinkActive="bg-blue-600 text-white font-medium shadow-md shadow-blue-600/30"
+            title="Casos de Uso CUS-02 / CUS-05: Supervisión, Control de Calidad y Corrección OCR"
             class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
             <i class="fas fa-columns w-4 text-center text-slate-400 group-hover:text-blue-400"></i>
             <div class="flex-1">
-              <div>CUS-02 / CUS-05: Revisión OCR</div>
+              <div class="font-medium text-slate-200 group-hover:text-white">Revisión OCR</div>
               <div class="text-[10px] text-slate-400 font-normal opacity-75">Visor Splitscreen 50/50</div>
             </div>
-            <span class="px-1.5 py-0.5 text-[9px] font-bold bg-amber-500/20 text-amber-300 rounded border border-amber-500/30">Criterio</span>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-amber-300 font-mono border border-slate-700">CUS-02/05</span>
           </a>
 
-          <!-- CUS-03 -->
+          <!-- Archivo Histórico (CUS-03) -->
           <a
+            *ngIf="canAccess(['Personal de archivo', 'Contable', 'SUNAT', 'Administrador'])"
             routerLink="/archivo-historico"
             routerLinkActive="bg-blue-600 text-white font-medium shadow-md shadow-blue-600/30"
+            title="Caso de Uso CUS-03: Búsqueda y Localización en Archivo Histórico"
             class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
             <i class="fas fa-archive w-4 text-center text-slate-400 group-hover:text-blue-400"></i>
             <div class="flex-1">
-              <div>CUS-03: Archivo Histórico</div>
+              <div class="font-medium text-slate-200 group-hover:text-white">Archivo Histórico</div>
               <div class="text-[10px] text-slate-400 font-normal opacity-75">Buscador y Almacén</div>
             </div>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-300 font-mono border border-slate-700">CUS-03</span>
           </a>
 
-          <!-- CUS-04 -->
+          <!-- Reportes y Auditoría (CUS-04) -->
           <a
+            *ngIf="canAccess(['SUNAT', 'Administrador'])"
             routerLink="/reportes"
             routerLinkActive="bg-blue-600 text-white font-medium shadow-md shadow-blue-600/30"
+            title="Caso de Uso CUS-04: Reportes Tributarios y Auditoría SUNAT PLE 8.1"
             class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
             <i class="fas fa-chart-pie w-4 text-center text-slate-400 group-hover:text-blue-400"></i>
             <div class="flex-1">
-              <div>CUS-04: Reportes y Auditoría</div>
+              <div class="font-medium text-slate-200 group-hover:text-white">Reportes y Auditoría</div>
               <div class="text-[10px] text-slate-400 font-normal opacity-75">SUNAT PLE 8.1</div>
             </div>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-300 font-mono border border-slate-700">CUS-04</span>
           </a>
 
-          <!-- CUS-06 -->
+          <!-- Seguridad y Roles (CUS-06) -->
           <a
+            *ngIf="canAccess(['Administrador'])"
             routerLink="/administracion"
             routerLinkActive="bg-blue-600 text-white font-medium shadow-md shadow-blue-600/30"
+            title="Caso de Uso CUS-06: Gestión de Seguridad, Usuarios y Roles RBAC"
             class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
             <i class="fas fa-users-gear w-4 text-center text-slate-400 group-hover:text-blue-400"></i>
             <div class="flex-1">
-              <div>CUS-06: Seguridad y Roles</div>
+              <div class="font-medium text-slate-200 group-hover:text-white">Seguridad y Roles</div>
               <div class="text-[10px] text-slate-400 font-normal opacity-75">Usuarios y Parámetros</div>
             </div>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-300 font-mono border border-slate-700">CUS-06</span>
           </a>
         </nav>
 
@@ -122,7 +137,7 @@ import { NotificationService } from '../../core/services/notification.service';
 
       <!-- CONTENEDOR PRINCIPAL -->
       <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <!-- HEADER TOP BAR CON SELECTOR DE ROL -->
+        <!-- HEADER TOP BAR -->
         <header class="h-16 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0 z-10">
           <!-- Breadcrumb y Título -->
           <div class="flex items-center gap-3">
@@ -130,43 +145,33 @@ import { NotificationService } from '../../core/services/notification.service';
               <i class="fas fa-layer-group text-blue-600"></i>
               <span>Shohin S.A.</span>
               <span class="text-slate-300">/</span>
-              <span class="text-slate-700 font-semibold">{{ currentBreadcrumb }}</span>
+              <span class="text-slate-700 font-semibold cursor-help" [title]="currentCusTooltip">{{ currentBreadcrumb }}</span>
             </div>
           </div>
 
-          <!-- Selector Rápido de Roles para la Demostración Académica -->
-          <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
-            <span class="text-[11px] font-semibold text-slate-500 px-2 flex items-center gap-1">
-              <i class="fas fa-id-badge text-blue-600"></i>
-              <span>Simular Rol:</span>
-            </span>
+          <!-- Indicador del Rol Autenticado -->
+          <div class="flex items-center gap-3">
+            <div
+              class="flex items-center gap-2.5 px-3 py-1.5 bg-slate-100/90 border border-slate-200 rounded-xl"
+              title="Rol institucional activo asignado a la sesión">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span class="text-xs text-slate-500 font-medium">Rol activo:</span>
+              <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                <span>{{ getRoleIcon(currentRole()) }}</span>
+                <span>{{ currentRole() }}</span>
+              </span>
+            </div>
 
+            <!-- Botón Cerrar Sesión -->
             <button
-              (click)="switchRole('contable')"
-              [class]="currentRole() === 'Contable' ? 'bg-white text-blue-700 shadow-sm font-bold border border-slate-200/80' : 'text-slate-600 hover:text-slate-900'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all flex items-center gap-1.5">
-              <span>💼</span> Contable
-            </button>
-
-            <button
-              (click)="switchRole('archivo')"
-              [class]="currentRole() === 'Personal de archivo' ? 'bg-white text-blue-700 shadow-sm font-bold border border-slate-200/80' : 'text-slate-600 hover:text-slate-900'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all flex items-center gap-1.5">
-              <span>📁</span> Personal de archivo
-            </button>
-
-            <button
-              (click)="switchRole('sunat')"
-              [class]="currentRole() === 'SUNAT' ? 'bg-white text-blue-700 shadow-sm font-bold border border-slate-200/80' : 'text-slate-600 hover:text-slate-900'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all flex items-center gap-1.5">
-              <span>🔍</span> SUNAT
-            </button>
-
-            <button
-              (click)="switchRole('admin')"
-              [class]="currentRole() === 'Administrador' ? 'bg-white text-blue-700 shadow-sm font-bold border border-slate-200/80' : 'text-slate-600 hover:text-slate-900'"
-              class="px-2.5 py-1 text-xs rounded-lg transition-all flex items-center gap-1.5">
-              <span>⚙️</span> Admin
+              (click)="logout()"
+              title="Cerrar Sesión Activa"
+              class="px-3 py-1.5 text-xs text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 rounded-xl transition-all flex items-center gap-1.5">
+              <i class="fas fa-arrow-right-from-bracket"></i>
+              <span class="hidden sm:inline font-medium">Salir</span>
             </button>
           </div>
         </header>
@@ -208,21 +213,50 @@ export class MainLayoutComponent {
   toasts = this.notificationService.toasts;
 
   currentBreadcrumb = 'Digitalización y Archivo Contable';
+  currentCusTooltip = 'Sistema de Digitalización Shohin S.A.';
 
   constructor() {
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
       this.updateBreadcrumb();
     });
+    this.updateBreadcrumb();
   }
 
   updateBreadcrumb(): void {
     const url = this.router.url;
-    if (url.includes('/digitalizacion/tickets')) this.currentBreadcrumb = 'CUS-01: Recepción y Digitalización de Lotes';
-    else if (url.includes('/digitalizacion/revision')) this.currentBreadcrumb = 'CUS-02 / CUS-05: Supervisión y Control de Calidad OCR';
-    else if (url.includes('/archivo-historico')) this.currentBreadcrumb = 'CUS-03: Búsqueda y Localización en Archivo Histórico';
-    else if (url.includes('/reportes')) this.currentBreadcrumb = 'CUS-04: Reportes Tributarios y Auditoría';
-    else if (url.includes('/administracion')) this.currentBreadcrumb = 'CUS-06: Gestión de Seguridad y Roles';
-    else this.currentBreadcrumb = 'Panel Principal';
+    if (url.includes('/digitalizacion/tickets')) {
+      this.currentBreadcrumb = 'Recepción y Digitalización de Lotes';
+      this.currentCusTooltip = 'Caso de Uso CUS-01: Recepción de Lotes';
+    } else if (url.includes('/digitalizacion/revision')) {
+      this.currentBreadcrumb = 'Supervisión y Control de Calidad OCR';
+      this.currentCusTooltip = 'Casos de Uso CUS-02 / CUS-05: Supervisión y Corrección OCR';
+    } else if (url.includes('/archivo-historico')) {
+      this.currentBreadcrumb = 'Archivo Histórico y Búsqueda';
+      this.currentCusTooltip = 'Caso de Uso CUS-03: Búsqueda y Almacén Físico';
+    } else if (url.includes('/reportes')) {
+      this.currentBreadcrumb = 'Reportes Tributarios y Auditoría';
+      this.currentCusTooltip = 'Caso de Uso CUS-04: Reportes Tributarios y PLE 8.1';
+    } else if (url.includes('/administracion')) {
+      this.currentBreadcrumb = 'Seguridad y Gestión de Roles';
+      this.currentCusTooltip = 'Caso de Uso CUS-06: Seguridad y Parámetros RBAC';
+    } else {
+      this.currentBreadcrumb = 'Panel Principal';
+      this.currentCusTooltip = 'Sistema de Digitalización Shohin S.A.';
+    }
+  }
+
+  canAccess(roles: string[]): boolean {
+    return this.authService.canAccess(roles);
+  }
+
+  getRoleIcon(role: string): string {
+    switch (role) {
+      case 'Contable': return '💼';
+      case 'Personal de archivo': return '📁';
+      case 'SUNAT': return '🔍';
+      case 'Administrador': return '⚙️';
+      default: return '👤';
+    }
   }
 
   getUserInitials(): string {

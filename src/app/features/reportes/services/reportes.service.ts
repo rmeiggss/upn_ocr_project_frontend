@@ -71,7 +71,19 @@ export class ReportesService {
 
   obtenerReporteAuditoria(filtro?: ReporteFiltro): Observable<ReporteAuditoria> {
     return this.http.get<any>(`${this.baseUrl}/reportes/auditoria`).pipe(
-      map(res => (res?.datos || res) as ReporteAuditoria),
+      map(res => {
+        const data = (res?.datos || res) as ReporteAuditoria;
+        if (data && Array.isArray(data.documentos)) {
+          data.documentos = data.documentos.map(d => ({
+            ...d,
+            total: d.total ?? (d as any).montoTotal ?? 0,
+            subtotal: d.subtotal ?? (d as any).montoSubTotal ?? 0,
+            igv: d.igv ?? (d as any).montoIgv ?? 0,
+            serieNumero: d.serieNumero || ((d as any).serieComprobante ? `${(d as any).serieComprobante}-${(d as any).numeroComprobante}` : 'S/N')
+          }));
+        }
+        return data;
+      }),
       catchError(() => of(this.mockReporte))
     );
   }

@@ -184,9 +184,9 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pip
                 <td class="py-3 px-4">{{ doc.rucEmisor }}</td>
                 <td class="py-3 px-4 font-sans font-medium text-slate-800">{{ doc.razonSocial }}</td>
                 <td class="py-3 px-4 font-bold text-blue-600">{{ doc.serieNumero }}</td>
-                <td class="py-3 px-4 text-right">{{ doc.subtotal | currencyFormat }}</td>
-                <td class="py-3 px-4 text-right text-emerald-700 font-bold">{{ doc.igv | currencyFormat }}</td>
-                <td class="py-3 px-4 text-right font-black text-slate-900">{{ doc.total | currencyFormat }}</td>
+                <td class="py-3 px-4 text-right">{{ (doc.subtotal || doc.montoSubTotal || 0) | currencyFormat }}</td>
+                <td class="py-3 px-4 text-right text-emerald-700 font-bold">{{ (doc.igv || doc.montoIgv || 0) | currencyFormat }}</td>
+                <td class="py-3 px-4 text-right font-black text-slate-900">{{ (doc.total || doc.montoTotal || 0) | currencyFormat }}</td>
                 <td class="py-3 px-4 font-sans">
                   <app-status-badge [status]="doc.estado"></app-status-badge>
                 </td>

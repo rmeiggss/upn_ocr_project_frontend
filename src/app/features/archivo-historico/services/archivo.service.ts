@@ -131,7 +131,7 @@ export class ArchivoService {
           docs = docs.filter(d => d.rucEmisor.includes(filtros.rucEmisor));
         }
         if (filtros.serieNumero) {
-          docs = docs.filter(d => d.serieNumero.toLowerCase().includes(filtros.serieNumero.toLowerCase()));
+          docs = docs.filter(d => d.serieNumero?.toLowerCase().includes(filtros.serieNumero.toLowerCase()));
         }
         if (filtros.tipoDocumento) {
           docs = docs.filter(d => d.tipoDocumento === filtros.tipoDocumento);

@@ -276,7 +276,7 @@ import { ArchivoService } from '../../../archivo-historico/services/archivo.serv
                               <td class="py-2.5 px-3 text-center">
                                 <span
                                   class="px-2 py-0.5 rounded-full text-[10px] font-bold"
-                                  [ngClass]="doc.confianzaGeneral >= 85 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'">
+                                  [ngClass]="(doc.confianzaGeneral || 0) >= 85 ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'">
                                   {{ doc.confianzaGeneral }}%
                                 </span>
                               </td>

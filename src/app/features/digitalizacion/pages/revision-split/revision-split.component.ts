@@ -483,7 +483,7 @@ export class RevisionSplitComponent implements OnInit {
     this.digitalizacionService.getDocumentoPorId(id).subscribe(doc => {
       if (doc) {
         this.documento = doc;
-        this.isIgvCorrected = doc.estado === 'CORRECTO' || (doc.subtotal > 0 && Math.abs((doc.igv || 0) - (doc.subtotal * 0.18)) < 0.05);
+        this.isIgvCorrected = doc.estado === 'CORRECTO' || ((doc.subtotal || 0) > 0 && Math.abs((doc.igv || 0) - ((doc.subtotal || 0) * 0.18)) < 0.05);
       }
     });
   }

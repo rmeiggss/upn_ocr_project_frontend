@@ -578,7 +578,7 @@ export class DigitalizacionService {
         const q = (filtro || '').trim().toLowerCase();
         const filtrados = q
           ? mapped.filter(d =>
-              d.serieNumero.toLowerCase().includes(q) ||
+              d.serieNumero?.toLowerCase().includes(q) ||
               d.razonSocial.toLowerCase().includes(q) ||
               d.rucEmisor.toLowerCase().includes(q) ||
               (d.nombreArchivo && d.nombreArchivo.toLowerCase().includes(q)))
@@ -599,7 +599,7 @@ export class DigitalizacionService {
         const q = (filtro || '').trim().toLowerCase();
         const filtrados = q
           ? list.filter(d =>
-              d.serieNumero.toLowerCase().includes(q) ||
+              d.serieNumero?.toLowerCase().includes(q) ||
               d.razonSocial.toLowerCase().includes(q) ||
               d.rucEmisor.toLowerCase().includes(q))
           : list;

@@ -223,7 +223,8 @@ import { environment } from '../../../../../environments/environment';
           [class]="splitscreenMode ? 'w-1/2' : 'w-full max-w-4xl mx-auto'"
           class="bg-white flex flex-col overflow-y-auto">
           
-          <!-- Banner de Discrepancia Crítica (CUS-05) -->
+          <!-- Banner de Discrepancia Crítica (CUS-05) Ocultado a solicitud -->
+          <!--
           <div *ngIf="!isIgvCorrected" class="m-5 p-4 bg-amber-50 border border-amber-300 rounded-2xl flex items-start gap-3 shadow-xs">
             <div class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 text-sm font-bold">
               <i class="fas fa-triangle-exclamation"></i>
@@ -252,6 +253,7 @@ import { environment } from '../../../../../environments/environment';
               ✅ Campo IGV corregido y conciliado satisfactoriamente. Nivel de certeza elevado al 100%.
             </div>
           </div>
+          -->
 
           <!-- Formulario de Campos Extraídos -->
           <div class="p-6 space-y-4 flex-1">

@@ -47,19 +47,19 @@ import { NotificationService } from '../../core/services/notification.service';
             <span class="text-[9px] text-slate-600 font-mono" title="Acceso controlado según perfil">RBAC</span>
           </div>
 
-          <!-- Recepción Lotes (CUS-01) -->
+          <!-- Recepción Lotes / Bandeja Tickets (CUS-01 & CUS-02) -->
           <a
-            *ngIf="canAccess(['Personal de archivo', 'Administrador'])"
+            *ngIf="canAccess(['Personal de archivo', 'Contable', 'Administrador'])"
             routerLink="/digitalizacion/tickets"
             routerLinkActive="bg-blue-600 text-white font-medium shadow-md shadow-blue-600/30"
-            title="Caso de Uso CUS-01: Recepción y Digitalización de Lotes"
+            title="Bandeja de Tickets y Digitalización de Lotes"
             class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs text-slate-400 hover:text-white hover:bg-slate-800 transition-all group">
             <i class="fas fa-boxes-packing w-4 text-center text-slate-400 group-hover:text-blue-400"></i>
             <div class="flex-1">
-              <div class="font-medium text-slate-200 group-hover:text-white">Recepción de Lotes</div>
-              <div class="text-[10px] text-slate-400 font-normal opacity-75">Bandeja de escaneo</div>
+              <div class="font-medium text-slate-200 group-hover:text-white">Bandeja de Tickets</div>
+              <div class="text-[10px] text-slate-400 font-normal opacity-75">Recepción y seguimiento</div>
             </div>
-            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-300 font-mono border border-slate-700">CUS-01</span>
+            <span class="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-blue-300 font-mono border border-slate-700">CUS-01/02</span>
           </a>
 
           <!-- Revisión OCR (CUS-02 & CUS-05) -->
@@ -79,7 +79,7 @@ import { NotificationService } from '../../core/services/notification.service';
 
           <!-- Archivo Histórico (CUS-03) -->
           <a
-            *ngIf="canAccess(['Personal de archivo', 'Contable', 'SUNAT', 'Administrador'])"
+            *ngIf="canAccess(['Contable', 'SUNAT', 'Administrador'])"
             routerLink="/archivo-historico"
             routerLinkActive="bg-blue-600 text-white font-medium shadow-md shadow-blue-600/30"
             title="Caso de Uso CUS-03: Búsqueda y Localización en Archivo Histórico"

@@ -77,7 +77,7 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
       </div>
 
       <!-- TRAZABILIDAD DE AUDITORIA TRANSVERSAL -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-4">
+      <!-- <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5 space-y-4">
         <div class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between pb-2 border-b">
           <span>Pista de Auditoría Automática (AuditableEntity)</span>
           <span class="text-[10px] text-slate-400">SaveChangesAsync() Hook</span>
@@ -108,7 +108,7 @@ import { StatusBadgeComponent } from '../../../../shared/components/status-badge
             <span class="text-slate-400 text-[10px]">roberto.campos | 2026-02-14 16:50:33</span>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- MODAL CREAR USUARIO (CUS-06) -->
       <div *ngIf="mostrarModalNuevo" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">

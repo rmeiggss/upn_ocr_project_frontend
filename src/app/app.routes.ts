@@ -33,7 +33,7 @@ export const routes: Routes = [
         path: 'digitalizacion/tickets',
         component: BandejaTicketsComponent,
         canActivate: [roleGuard],
-        data: { roles: ['Personal de archivo', 'Administrador'] }
+        data: { roles: ['Personal de archivo', 'Contable', 'Administrador'] }
       },
       {
         path: 'digitalizacion/revision/:id',
@@ -50,7 +50,7 @@ export const routes: Routes = [
         path: 'archivo-historico',
         component: BuscadorComponent,
         canActivate: [roleGuard],
-        data: { roles: ['Personal de archivo', 'Contable', 'SUNAT', 'Administrador'] }
+        data: { roles: ['Contable', 'SUNAT', 'Administrador'] }
       },
       {
         path: 'reportes',

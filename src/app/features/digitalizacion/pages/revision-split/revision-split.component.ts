@@ -2,12 +2,14 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DigitalizacionService } from '../../services/digitalizacion.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { DocumentoContable } from '../../../../core/models/comprobante.model';
 import { StatusBadgeComponent } from '../../../../shared/components/status-badge/status-badge.component';
 import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pipe';
 import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-revision-split',
@@ -78,82 +80,117 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
           <div class="h-11 bg-slate-950/80 backdrop-blur-xs border-b border-slate-800 px-4 flex items-center justify-between text-slate-300 text-xs shrink-0">
             <div class="flex items-center gap-2">
               <i class="fas fa-file-pdf text-rose-500"></i>
-              <span class="font-mono text-[11px] truncate max-w-[220px]">factura_F001-00045231.pdf</span>
-              <span class="px-1.5 py-0.5 text-[9px] bg-slate-800 text-slate-400 rounded">Pág. 1 de 1</span>
+              <span class="font-mono text-[11px] truncate max-w-[240px]" [title]="documento.nombreArchivo || 'documento.pdf'">
+                {{ documento.nombreArchivo || 'documento.pdf' }}
+              </span>
+              <span class="px-1.5 py-0.5 text-[9px] bg-slate-800 text-slate-400 rounded">Storage Account</span>
             </div>
 
-            <!-- Controles de Zoom -->
-            <div class="flex items-center gap-1 bg-slate-800/80 px-2 py-1 rounded-lg border border-slate-700">
-              <button (click)="zoomOut()" class="hover:text-white px-1"><i class="fas fa-minus text-[10px]"></i></button>
-              <span class="text-[10px] font-mono px-1 font-bold">{{ zoomLevel }}%</span>
-              <button (click)="zoomIn()" class="hover:text-white px-1"><i class="fas fa-plus text-[10px]"></i></button>
-              <button (click)="resetZoom()" class="hover:text-white px-1 border-l border-slate-700 pl-1.5"><i class="fas fa-arrows-rotate text-[10px]"></i></button>
+            <!-- Controles y Selector de Vista -->
+            <div class="flex items-center gap-2">
+              <div class="flex items-center bg-slate-800/90 rounded-lg p-0.5 text-[10px]">
+                <button
+                  type="button"
+                  (click)="modoVisor = 'pdf'"
+                  [class]="modoVisor === 'pdf' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'"
+                  class="px-2 py-0.5 rounded transition-all flex items-center gap-1">
+                  <i class="fas fa-file-pdf text-[10px]"></i>
+                  <span>PDF Original</span>
+                </button>
+                <button
+                  type="button"
+                  (click)="modoVisor = 'ocr'"
+                  [class]="modoVisor === 'ocr' ? 'bg-blue-600 text-white font-bold' : 'text-slate-400 hover:text-slate-200'"
+                  class="px-2 py-0.5 rounded transition-all flex items-center gap-1">
+                  <i class="fas fa-vector-square text-[10px]"></i>
+                  <span>Bounding Boxes</span>
+                </button>
+              </div>
+
+              <!-- Enlace para abrir o descargar el PDF original directamente -->
+              <a
+                [href]="pdfUrlRaw"
+                target="_blank"
+                title="Abrir comprobante original cargado en Azure Blob Storage en nueva pestaña"
+                class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-white transition-colors flex items-center gap-1 text-[11px]">
+                <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                <span class="hidden sm:inline">Ver PDF</span>
+              </a>
+
+              <!-- Controles de Zoom (para modo OCR) -->
+              <div *ngIf="modoVisor === 'ocr'" class="flex items-center gap-1 bg-slate-800/80 px-2 py-0.5 rounded-lg border border-slate-700">
+                <button (click)="zoomOut()" class="hover:text-white px-1"><i class="fas fa-minus text-[10px]"></i></button>
+                <span class="text-[10px] font-mono px-1 font-bold">{{ zoomLevel }}%</span>
+                <button (click)="zoomIn()" class="hover:text-white px-1"><i class="fas fa-plus text-[10px]"></i></button>
+                <button (click)="resetZoom()" class="hover:text-white px-1 border-l border-slate-700 pl-1.5"><i class="fas fa-arrows-rotate text-[10px]"></i></button>
+              </div>
             </div>
           </div>
 
-          <!-- Lienzo de la Factura Escaneada con Bounding Boxes Interactivos -->
-          <div class="flex-1 overflow-auto p-6 flex items-center justify-center bg-slate-900/90 relative">
+          <!-- MODO 1: VISOR DEL PDF REAL DE AZURE BLOB STORAGE -->
+          <div *ngIf="modoVisor === 'pdf'" class="flex-1 w-full h-full relative bg-slate-950 overflow-hidden flex flex-col">
+            <iframe
+              *ngIf="pdfUrlSegura"
+              [src]="pdfUrlSegura"
+              class="w-full h-full border-0 bg-slate-900"
+              title="Visor del Documento Original de Azure Storage">
+            </iframe>
+            <div *ngIf="!pdfUrlSegura" class="flex flex-col items-center justify-center h-full text-slate-400 p-6 text-center">
+              <i class="fas fa-cloud-arrow-down text-4xl mb-3 text-slate-600"></i>
+              <div class="text-xs font-semibold">Cargando archivo original desde Azure Blob Storage...</div>
+            </div>
+          </div>
+
+          <!-- MODO 2: Lienzo con Bounding Boxes Interactivos (Metadatos OCR) -->
+          <div *ngIf="modoVisor === 'ocr'" class="flex-1 overflow-auto p-6 flex items-center justify-center bg-slate-900/90 relative">
             <div
               [style.transform]="'scale(' + zoomLevel / 100 + ')'"
               class="origin-center transition-transform duration-150 bg-white text-slate-800 shadow-2xl rounded-lg w-[480px] min-h-[640px] p-6 text-[10px] relative border border-slate-300">
               
-              <!-- Cabecera de la Factura F001 -->
+              <!-- Cabecera de la Factura Dinámica -->
               <div class="flex justify-between items-start border-b pb-3 mb-3">
                 <div>
-                  <div class="font-extrabold text-xs text-slate-900">DISTRIBUIDORA INDUSTRIAL DEL PERU S.A.C.</div>
-                  <div class="text-[9px] text-slate-500">Av. República de Panamá 3545, San Isidro, Lima</div>
-                  <div class="text-[9px] text-slate-500">Telf: (01) 421-9988 | ventas&#64;distribuidoraperu.com</div>
+                  <div class="font-extrabold text-xs text-slate-900">{{ documento.razonSocial || 'SIN RAZÓN SOCIAL' }}</div>
+                  <div class="text-[9px] text-slate-500">Documento analizado mediante Azure Document Intelligence</div>
+                  <div class="text-[9px] text-slate-400 font-mono mt-0.5">{{ documento.nombreArchivo }}</div>
                 </div>
                 <div class="border-2 border-slate-800 p-2 text-center rounded bg-slate-50 w-36">
-                  <div class="font-bold text-[10px]">R.U.C. 20512345678</div>
-                  <div class="font-extrabold text-blue-800 text-[11px] my-0.5">FACTURA ELECTRÓNICA</div>
-                  <div class="font-mono font-bold text-[10px]">F001 - 00045231</div>
+                  <div class="font-bold text-[10px]">R.U.C. {{ documento.rucEmisor || '-' }}</div>
+                  <div class="font-extrabold text-blue-800 text-[11px] my-0.5">{{ documento.tipoDocumento || 'COMPROBANTE' }}</div>
+                  <div class="font-mono font-bold text-[10px]">{{ documento.serieNumero || 'S/N' }}</div>
                 </div>
               </div>
 
               <!-- Metadatos de Factura -->
               <div class="grid grid-cols-2 gap-2 p-2 bg-slate-50 rounded border border-slate-200 mb-3 text-[9px]">
-                <div><span class="font-bold text-slate-600">Fecha de Emisión:</span> 15/01/2024</div>
-                <div><span class="font-bold text-slate-600">Moneda:</span> SOLES (PEN)</div>
-                <div><span class="font-bold text-slate-600">Señor(es):</span> SHOHIN S.A.</div>
-                <div><span class="font-bold text-slate-600">R.U.C. Cliente:</span> 20123456789</div>
+                <div><span class="font-bold text-slate-600">Fecha de Emisión:</span> {{ documento.fechaEmision || '-' }}</div>
+                <div><span class="font-bold text-slate-600">Moneda:</span> {{ documento.moneda || 'PEN' }}</div>
+                <div><span class="font-bold text-slate-600">Ticket Lote:</span> {{ documento.codigoTicket }}</div>
+                <div><span class="font-bold text-slate-600">Estado OCR:</span> {{ documento.estado }}</div>
               </div>
 
-              <!-- Tabla de Items Facturados -->
-              <table class="w-full text-[9px] border mb-4">
-                <thead class="bg-slate-100 font-bold border-b">
-                  <tr>
-                    <th class="p-1 text-left">Cant.</th>
-                    <th class="p-1 text-left">Descripción</th>
-                    <th class="p-1 text-right">P. Unit</th>
-                    <th class="p-1 text-right">Total</th>
-                  </tr>
-                </thead>
-                <tbody class="divide-y text-slate-600">
-                  <tr>
-                    <td class="p-1">10</td>
-                    <td class="p-1">Cajas de Archivo Cartón Kraft Reforzado</td>
-                    <td class="p-1 text-right">45.00</td>
-                    <td class="p-1 text-right">450.00</td>
-                  </tr>
-                  <tr>
-                    <td class="p-1">5</td>
-                    <td class="p-1">Paquetes Folios Documentales Especiales</td>
-                    <td class="p-1 text-right">110.00</td>
-                    <td class="p-1 text-right">550.00</td>
-                  </tr>
-                </tbody>
-              </table>
+              <!-- Lista de Campos Extraídos OCR -->
+              <div class="mb-4">
+                <div class="font-bold text-slate-700 uppercase text-[9px] mb-1.5 border-b pb-1">Campos OCR Mapeados</div>
+                <div *ngIf="documento.campos && documento.campos.length > 0" class="space-y-1">
+                  <div *ngFor="let c of documento.campos" class="flex justify-between items-center py-1 px-1.5 bg-slate-50 rounded border border-slate-100">
+                    <span class="font-medium text-slate-600">{{ c.nombreCampo }}</span>
+                    <span class="font-mono font-bold text-slate-800">{{ c.valorCorregido || c.valorExtraido || '-' }}</span>
+                    <span class="text-[8px] px-1 rounded bg-emerald-100 text-emerald-700 font-bold">{{ c.nivelConfianza }}%</span>
+                  </div>
+                </div>
+                <div *ngIf="!documento.campos || documento.campos.length === 0" class="text-slate-400 text-center py-4">
+                  Visualice la pestaña "PDF Original" para auditar el contenido completo del folio.
+                </div>
+              </div>
 
               <!-- Totales e Impuestos con Bounding Boxes -->
               <div class="w-48 ml-auto space-y-1 text-[9px] border-t pt-2">
-                <!-- Bounding Box Subtotal -->
                 <div class="flex justify-between items-center px-1.5 py-0.5 rounded bg-emerald-50 border border-emerald-400">
                   <span class="font-semibold text-slate-600">Op. Gravada:</span>
-                  <span class="font-mono font-bold">S/ {{ documento.subtotal | number:'1.2-2' }}</span>
+                  <span class="font-mono font-bold">S/ {{ (documento.subtotal || 0) | number:'1.2-2' }}</span>
                 </div>
 
-                <!-- Bounding Box IGV con alerta visual -->
                 <div
                   [ngClass]="isIgvCorrected ? 'bg-emerald-50 border-emerald-400' : 'bg-rose-50 border-rose-500 animate-pulse'"
                   class="flex justify-between items-center px-1.5 py-0.5 rounded border-2 relative">
@@ -161,17 +198,13 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
                     I.G.V. (18%):
                   </span>
                   <span class="font-mono font-black" [ngClass]="isIgvCorrected ? 'text-emerald-700' : 'text-rose-700'">
-                    S/ {{ documento.igv | number:'1.2-2' }}
+                    S/ {{ (documento.igv || 0) | number:'1.2-2' }}
                   </span>
-                  <div *ngIf="!isIgvCorrected" class="absolute -left-20 top-0 text-[8px] bg-rose-600 text-white font-bold px-1 rounded">
-                    ¡ERROR OCR!
-                  </div>
                 </div>
 
-                <!-- Bounding Box Total -->
                 <div class="flex justify-between items-center px-1.5 py-0.5 rounded bg-slate-100 font-bold border border-slate-300">
                   <span>Importe Total:</span>
-                  <span class="font-mono font-black text-slate-900">S/ {{ documento.total | number:'1.2-2' }}</span>
+                  <span class="font-mono font-black text-slate-900">S/ {{ (documento.total || 0) | number:'1.2-2' }}</span>
                 </div>
               </div>
 
@@ -342,7 +375,8 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
               </div>
             </div>
 
-            <!-- Ficha de Almacén Físico -->
+            <!-- Ficha de Almacén Físico (Comentado temporalmente por requerimiento: campos no persistidos en BD) -->
+            <!--
             <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-200/80 text-xs">
               <div class="font-bold text-blue-900 flex items-center gap-2 mb-1">
                 <i class="fas fa-box-archive text-blue-600"></i>
@@ -357,6 +391,7 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
                 <div>Caja: <strong class="text-slate-800">{{ documento.cajaArchivo }}</strong></div>
               </div>
             </div>
+            -->
           </div>
 
           <!-- BARRA INFERIOR DE DECISIÓN Y TRANSICIÓN DE ESTADOS -->
@@ -373,12 +408,12 @@ import { ScoreBadgePipe } from '../../../../shared/pipes/score-badge.pipe';
                 Declarar Ilegible
               </button>
 
-              <button
+              <!-- <button
                 type="button"
                 (click)="cambiarEstado('REPROCESAR')"
                 class="px-3 py-1.5 text-xs font-semibold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors">
                 Reprocesar OCR
-              </button>
+              </button> -->
 
               <button
                 type="button"
@@ -406,8 +441,10 @@ export class RevisionSplitComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private digitalizacionService = inject(DigitalizacionService);
   private notificationService = inject(NotificationService);
+  private sanitizer = inject(DomSanitizer);
 
   splitscreenMode: boolean = true;
+  modoVisor: 'pdf' | 'ocr' = 'pdf';
   zoomLevel: number = 100;
   isIgvCorrected: boolean = false;
 
@@ -429,15 +466,24 @@ export class RevisionSplitComponent implements OnInit {
     estado: 'OBSERVADO',
     ubicacionAlmacen: 'Almacén Central Lurín',
     estanteArchivo: 'Estante E-04',
-    cajaArchivo: 'Caja CJ-2023-B4'
+    cajaArchivo: 'Caja CJ-2023-B4',
+    nombreArchivo: 'factura_F001-00045231.pdf'
   };
+
+  get pdfUrlRaw(): string {
+    return `${environment.apiUrl}/documentos/${this.documento.idDocumento}/archivo`;
+  }
+
+  get pdfUrlSegura(): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrlRaw);
+  }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id')) || 1;
     this.digitalizacionService.getDocumentoPorId(id).subscribe(doc => {
       if (doc) {
         this.documento = doc;
-        this.isIgvCorrected = doc.estado === 'CORRECTO' || doc.igv === 180.00;
+        this.isIgvCorrected = doc.estado === 'CORRECTO' || (doc.subtotal > 0 && Math.abs((doc.igv || 0) - (doc.subtotal * 0.18)) < 0.05);
       }
     });
   }

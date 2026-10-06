@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { DocumentoContable, SolicitudBusquedaFisica } from '../../../core/models/comprobante.model';
+import { 
+  DocumentoContable, 
+  SolicitudBusquedaFisica, 
+  SolicitudBusquedaFisicaRequest, 
+  SolicitudBusquedaFisicaResponse 
+} from '../../../core/models/comprobante.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -29,6 +34,7 @@ export class ArchivoService {
       confianzaGeneral: 99,
       confianzaIgv: 100,
       estado: 'CORRECTO',
+      origenDatos: 'LOCAL',
       ubicacionAlmacen: 'Almacén Central Lurín',
       estanteArchivo: 'Estante E-04',
       cajaArchivo: 'Caja CJ-2023-B4'
@@ -49,6 +55,7 @@ export class ArchivoService {
       confianzaGeneral: 98,
       confianzaIgv: 99,
       estado: 'CORRECTO',
+      origenDatos: 'LOCAL',
       ubicacionAlmacen: 'Almacén Central Lurín',
       estanteArchivo: 'Estante E-02',
       cajaArchivo: 'Caja CJ-2023-A1'
@@ -69,6 +76,7 @@ export class ArchivoService {
       confianzaGeneral: 75,
       confianzaIgv: 72,
       estado: 'OBSERVADO',
+      origenDatos: 'LOCAL',
       ubicacionAlmacen: 'Almacén Central Lurín',
       estanteArchivo: 'Estante E-05',
       cajaArchivo: 'Caja CJ-2023-C3'
@@ -89,6 +97,7 @@ export class ArchivoService {
       confianzaGeneral: 99,
       confianzaIgv: 100,
       estado: 'CORRECTO',
+      origenDatos: 'LOCAL',
       ubicacionAlmacen: 'Almacén Central Lurín',
       estanteArchivo: 'Estante E-03',
       cajaArchivo: 'Caja CJ-2023-A9'
@@ -98,11 +107,24 @@ export class ArchivoService {
   buscarDocumentos(filtros: any): Observable<DocumentoContable[]> {
     let params = new HttpParams();
     if (filtros.rucEmisor) params = params.set('rucEmisor', filtros.rucEmisor);
-    if (filtros.serieNumero) params = params.set('serieNumero', filtros.serieNumero);
+    if (filtros.serieNumero) params = params.set('codigoTicket', filtros.serieNumero);
+    if (filtros.tipoDocumento) params = params.set('tipoDocumento', filtros.tipoDocumento);
     if (filtros.estado) params = params.set('estado', filtros.estado);
 
     return this.http.get<any>(`${this.baseUrl}/historico/buscar`, { params }).pipe(
-      map(res => (Array.isArray(res) ? res : res?.datos || []) as DocumentoContable[]),
+      map(res => {
+        const rawItems = (Array.isArray(res) ? res : res?.datos || []) as any[];
+        return rawItems.map(d => ({
+          ...d,
+          total: d.total ?? d.montoTotal ?? 0,
+          subtotal: d.subtotal ?? d.montoSubTotal ?? 0,
+          igv: d.igv ?? d.montoIgv ?? 0,
+          montoTotal: d.montoTotal ?? d.total ?? 0,
+          montoSubTotal: d.montoSubTotal ?? d.subtotal ?? 0,
+          montoIgv: d.montoIgv ?? d.igv ?? 0,
+          serieNumero: d.serieNumero || (d.serieComprobante ? `${d.serieComprobante}-${d.numeroComprobante}` : 'S/N')
+        })) as DocumentoContable[];
+      }),
       catchError(() => {
         let docs = [...this.mockDocumentos];
         if (filtros.rucEmisor) {
@@ -110,6 +132,9 @@ export class ArchivoService {
         }
         if (filtros.serieNumero) {
           docs = docs.filter(d => d.serieNumero.toLowerCase().includes(filtros.serieNumero.toLowerCase()));
+        }
+        if (filtros.tipoDocumento) {
+          docs = docs.filter(d => d.tipoDocumento === filtros.tipoDocumento);
         }
         if (filtros.estado) {
           docs = docs.filter(d => d.estado === filtros.estado);
@@ -119,12 +144,15 @@ export class ArchivoService {
     );
   }
 
-  solicitarBusquedaFisica(solicitud: SolicitudBusquedaFisica): Observable<any> {
+  solicitarBusquedaFisica(solicitud: SolicitudBusquedaFisicaRequest | SolicitudBusquedaFisica): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/historico/solicitud-busqueda`, solicitud).pipe(
+      map(res => res?.datos || res),
       catchError(() => of({
         exito: true,
-        mensaje: 'Solicitud de desarchivamiento físico registrada con éxito para personal de almacén'
+        codigoTicket: `TK-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+        mensaje: 'Solicitud de búsqueda física registrada con éxito para personal de almacén'
       }))
     );
   }
 }
+

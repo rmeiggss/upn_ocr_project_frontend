@@ -29,7 +29,7 @@ export class AuthService {
       correo: 'maria.fernandez@shohin.com',
       rol: 'Contable',
       estado: true,
-      permisos: 'Validación OCR, Conciliación, CUS-02, CUS-05'
+      permisos: 'Bandeja Tickets, Validación OCR, Conciliación, CUS-01/02, CUS-05'
     },
     archivo: {
       idUsuario: 2,
@@ -38,7 +38,7 @@ export class AuthService {
       correo: 'carlos.mendoza@shohin.com',
       rol: 'Personal de archivo',
       estado: true,
-      permisos: 'Recepción Lotes, Búsqueda Almacén, CUS-01, CUS-03'
+      permisos: 'Recepción y Digitalización de Lotes, Conteo Físico, CUS-01'
     },
     sunat: {
       idUsuario: 3,
@@ -108,7 +108,7 @@ export class AuthService {
         this.router.navigate(['/digitalizacion/tickets']);
         break;
       case 'contable':
-        this.router.navigate(['/digitalizacion/revision/1']);
+        this.router.navigate(['/digitalizacion/tickets']);
         break;
       case 'sunat':
         this.router.navigate(['/reportes']);
@@ -125,7 +125,7 @@ export class AuthService {
       case 'Personal de archivo':
         return '/digitalizacion/tickets';
       case 'Contable':
-        return '/digitalizacion/revision/1';
+        return '/digitalizacion/tickets';
       case 'SUNAT':
         return '/reportes';
       case 'Administrador':
